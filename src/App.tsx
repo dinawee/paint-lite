@@ -1,4 +1,5 @@
 import './App.css'
+import { Canvas } from './components/Canvas'
 
 function App() {
   return (
@@ -15,8 +16,8 @@ function App() {
           [Control Panel - Tool options will go here]
         </aside>
 
-        <section className="canvas-container-placeholder">
-          [Canvas - Drawing area will go here]
+        <section className="canvas-container">
+          <Canvas width={600} height={400} />
         </section>
 
         <aside className="layers-panel-placeholder">
