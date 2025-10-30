@@ -1,42 +1,106 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* Main app layout */
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.app-header {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+  padding: 1rem;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.app-header h1 {
+  margin: 0;
+  color: #333;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Main content area */
+.app-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Control Panel */
+.control-panel {
+  width: 250px;
+  background-color: #fafafa;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
 }
 
-.card {
-  padding: 2em;
+.control-panel h3 {
+  margin-top: 0;
+  color: #555;
 }
 
-.read-the-docs {
-  color: #888;
+/* Canvas container */
+.canvas-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  padding: 2rem;
+}
+
+/* Layers Panel */
+.layers-panel {
+  width: 250px;
+  background-color: #fafafa;
+  border-left: 1px solid #ddd;
+  padding: 1rem;
+}
+
+.layers-panel h3 {
+  margin-top: 0;
+  color: #555;
+}
+
+/* Toolbar */
+.toolbar {
+  background-color: #e9ecef;
+  border-bottom: 1px solid #ddd;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.toolbar h2 {
+  margin: 0;
+  margin-right: 1rem;
+  color: #555;
+  font-size: 1rem;
+}
+
+.tool-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tool-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #555;
+}
+
+.tool-button:hover {
+  background-color: #f0f0f0;
+}
+
+.tool-button:active,
+.tool-button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
 }
