@@ -12,6 +12,8 @@ const ControlPanel = () => {
   const currentTool = usePaintStore((state) => state.currentTool);
   const setSelectedShape = usePaintStore((state) => state.setSelectedShape);
   const selectedShape = usePaintStore((state) => state.selectedShape);
+  const selectedColor = usePaintStore((state) => state.selectedColor);
+  const setSelectedColor = usePaintStore((state) => state.setSelectedColor);
   const showControlPanel = usePaintStore((state) => state.showControlPanel);
 
   const handleShapeChange = useCallback(
@@ -19,6 +21,13 @@ const ControlPanel = () => {
       setSelectedShape(event.target.value as ShapeType);
     },
     [setSelectedShape],
+  );
+
+  const handleColorChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setSelectedColor(event.target.value);
+    },
+    [setSelectedColor],
   );
 
   const isShapeToolActive = currentTool === 'shape';
@@ -30,16 +39,28 @@ const ControlPanel = () => {
         {!showControlPanel || !currentTool ? (
           <p>No tool selected</p>
         ) : isShapeToolActive ? (
-          <div className="form-field">
-            <label htmlFor="shape-select">Shape</label>
-            <select id="shape-select" value={selectedShape} onChange={handleShapeChange}>
-              {SHAPE_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <>
+            <div className="form-field">
+              <label htmlFor="shape-select">Shape</label>
+              <select id="shape-select" value={selectedShape} onChange={handleShapeChange}>
+                {SHAPE_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-field">
+              <label htmlFor="shape-color">Color</label>
+              <input
+                id="shape-color"
+                type="color"
+                value={selectedColor}
+                onChange={handleColorChange}
+                aria-label="Shape color"
+              />
+            </div>
+          </>
         ) : (
           <p>Controls for {currentTool} coming soon</p>
         )}
