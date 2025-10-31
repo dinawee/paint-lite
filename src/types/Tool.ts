@@ -27,4 +27,12 @@ export interface PaintActions {
   addLayer: (layer: Layer) => void;
 }
 
+export interface Tool {
+  onMouseDown: (event: MouseEvent, store: PaintStore) => void;
+  onMouseMove: (event: MouseEvent, store: PaintStore) => void;
+  onMouseUp: (event: MouseEvent, store: PaintStore) => void;
+}
+
+export type ToolRegistry = Partial<Record<ToolType, Tool>>;
+
 export type PaintStore = PaintState & PaintActions;

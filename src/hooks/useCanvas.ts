@@ -18,8 +18,8 @@ export const useCanvas = () => {
 
     const rect = canvasRef.current.getBoundingClientRect();
     return {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top,
+      x: event.clientX - rect.left, // local X coordinate relative to the left edge of the canvas
+      y: event.clientY - rect.top, // local Y coordinate relative to the top edge of the canvas
     };
   }, []);
 

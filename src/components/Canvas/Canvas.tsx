@@ -1,41 +1,12 @@
 import { useCallback } from 'react';
 import type { CanvasProps, CanvasMouseEvent } from '../../types/Canvas';
 import { useCanvas } from '../../hooks/useCanvas';
-import { usePaintStore } from '../../stores/usePaintStore';
-
-const getLayerId = () => {
-  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return crypto.randomUUID();
-  }
-
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-};
+import { useCanvasTool } from '../../hooks/useCanvasTool';
 
 const Canvas = ({ width = 600, height = 400, className = '' }: CanvasProps) => {
   const { canvasRef, getCanvasCoordinates } = useCanvas();
-  const currentTool = usePaintStore((state) => state.currentTool);
-  const selectedColor = usePaintStore((state) => state.selectedColor);
-  const addLayer = usePaintStore((state) => state.addLayer);
-
-  const createLayer = useCallback(
-    (eventName: string, event: CanvasMouseEvent) => {
-      if (!currentTool) {
-        return;
-      }
-
-      addLayer({
-        id: getLayerId(),
-        type: currentTool,
-        data: {
-          event: eventName,
-          coordinates: event.coordinates,
-          color: selectedColor,
-        },
-        createdAt: Date.now(),
-      });
-    },
-    [addLayer, currentTool, selectedColor],
-  );
+  const { handlers, currentToolType } = useCanvasTool();
+  const { onMouseDown: toolMouseDown, onMouseMove: toolMouseMove, onMouseUp: toolMouseUp } = handlers;
 
   const buildCanvasEvent = useCallback(
     (event: React.MouseEvent<HTMLCanvasElement>): CanvasMouseEvent => {
@@ -52,11 +23,14 @@ const Canvas = ({ width = 600, height = 400, className = '' }: CanvasProps) => {
     (event: React.MouseEvent<HTMLCanvasElement>) => {
       const canvasEvent = buildCanvasEvent(event);
 
-      // eslint-disable-next-line no-console
-      console.debug('Canvas mousedown:', { canvasEvent, currentTool });
-      createLayer('mousedown', canvasEvent);
+      if (import.meta.env.DEV) {
+        // eslint-disable-next-line no-console
+        console.debug('Canvas mousedown:', { canvasEvent, currentToolType });
+      }
+
+      toolMouseDown(event);
     },
-    [buildCanvasEvent, createLayer, currentTool],
+    [buildCanvasEvent, currentToolType, toolMouseDown],
   );
 
   const handleMouseMove = useCallback(
@@ -65,21 +39,26 @@ const Canvas = ({ width = 600, height = 400, className = '' }: CanvasProps) => {
 
       if (import.meta.env.DEV) {
         // eslint-disable-next-line no-console
-        console.debug('Canvas mousemove:', { canvasEvent, currentTool });
+        console.debug('Canvas mousemove:', { canvasEvent, currentToolType });
       }
+
+      toolMouseMove(event);
     },
-    [buildCanvasEvent, currentTool],
+    [buildCanvasEvent, currentToolType, toolMouseMove],
   );
 
   const handleMouseUp = useCallback(
     (event: React.MouseEvent<HTMLCanvasElement>) => {
       const canvasEvent = buildCanvasEvent(event);
 
-      // eslint-disable-next-line no-console
-      console.debug('Canvas mouseup:', { canvasEvent, currentTool });
-      createLayer('mouseup', canvasEvent);
+      if (import.meta.env.DEV) {
+        // eslint-disable-next-line no-console
+        console.debug('Canvas mouseup:', { canvasEvent, currentToolType });
+      }
+
+      toolMouseUp(event);
     },
-    [buildCanvasEvent, createLayer, currentTool],
+    [buildCanvasEvent, currentToolType, toolMouseUp],
   );
 
   return (
@@ -93,7 +72,7 @@ const Canvas = ({ width = 600, height = 400, className = '' }: CanvasProps) => {
         onMouseUp={handleMouseUp}
         style={{
           border: '1px solid #ccc',
-          cursor: currentTool ? 'crosshair' : 'default',
+          cursor: currentToolType ? 'crosshair' : 'default',
         }}
       />
     </div>
