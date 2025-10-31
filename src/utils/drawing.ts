@@ -15,18 +15,26 @@ export const drawOnCanvas = (
   drawFn(ctx);
 };
 
+const DEFAULT_LINE_WIDTH = 2;
+
 export const placeCircle = (
   canvas: HTMLCanvasElement,
   x: number,
   y: number,
-  color: string,
+  strokeColor: string,
+  fillColor: string | null,
   radius: number = DEFAULT_CIRCLE_RADIUS,
+  lineWidth: number = DEFAULT_LINE_WIDTH,
 ) => {
   drawOnCanvas(canvas, (ctx) => {
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
+    if (fillColor) {
+      ctx.fillStyle = fillColor;
+      ctx.fill();
+    }
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = lineWidth;
     ctx.stroke();
     ctx.closePath();
   });
@@ -36,14 +44,22 @@ export const placeRectangle = (
   canvas: HTMLCanvasElement,
   x: number,
   y: number,
-  color: string,
+  strokeColor: string,
+  fillColor: string | null,
   width: number = DEFAULT_RECT_WIDTH,
   height: number = DEFAULT_RECT_HEIGHT,
+  lineWidth: number = DEFAULT_LINE_WIDTH,
 ) => {
   drawOnCanvas(canvas, (ctx) => {
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
-    ctx.strokeRect(x - width / 2, y - height / 2, width, height);
+    const topLeftX = x - width / 2;
+    const topLeftY = y - height / 2;
+    if (fillColor) {
+      ctx.fillStyle = fillColor;
+      ctx.fillRect(topLeftX, topLeftY, width, height);
+    }
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = lineWidth;
+    ctx.strokeRect(topLeftX, topLeftY, width, height);
   });
 };
 
@@ -51,8 +67,10 @@ export const placeTriangle = (
   canvas: HTMLCanvasElement,
   x: number,
   y: number,
-  color: string,
+  strokeColor: string,
+  fillColor: string | null,
   size: number = DEFAULT_TRIANGLE_SIZE,
+  lineWidth: number = DEFAULT_LINE_WIDTH,
 ) => {
   drawOnCanvas(canvas, (ctx) => {
     const height = (size * Math.sqrt(3)) / 2;
@@ -62,8 +80,14 @@ export const placeTriangle = (
     ctx.lineTo(x - size / 2, y + height / 2);
     ctx.lineTo(x + size / 2, y + height / 2);
     ctx.closePath();
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
+
+    if (fillColor) {
+      ctx.fillStyle = fillColor;
+      ctx.fill();
+    }
+
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = lineWidth;
     ctx.stroke();
   });
 };

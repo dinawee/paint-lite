@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef } from 'react';
 import { usePaintStore } from '../../stores/usePaintStore';
 import type { ShapeType } from '../../types/Tool';
 
@@ -12,8 +12,10 @@ const ControlPanel = () => {
   const currentTool = usePaintStore((state) => state.currentTool);
   const setSelectedShape = usePaintStore((state) => state.setSelectedShape);
   const selectedShape = usePaintStore((state) => state.selectedShape);
-  const selectedColor = usePaintStore((state) => state.selectedColor);
-  const setSelectedColor = usePaintStore((state) => state.setSelectedColor);
+  const selectedStrokeColor = usePaintStore((state) => state.selectedStrokeColor);
+  const setSelectedStrokeColor = usePaintStore((state) => state.setSelectedStrokeColor);
+  const selectedFillColor = usePaintStore((state) => state.selectedFillColor);
+  const setSelectedFillColor = usePaintStore((state) => state.setSelectedFillColor);
   const clearCanvas = usePaintStore((state) => state.clearCanvas);
   const showControlPanel = usePaintStore((state) => state.showControlPanel);
 
@@ -24,14 +26,47 @@ const ControlPanel = () => {
     [setSelectedShape],
   );
 
-  const handleColorChange = useCallback(
+  const lastFillColorRef = useRef<string>(selectedFillColor ?? '#ff0000');
+
+  useEffect(() => {
+    if (selectedFillColor) {
+      lastFillColorRef.current = selectedFillColor;
+    }
+  }, [selectedFillColor]);
+
+  const handleStrokeColorChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      setSelectedColor(event.target.value);
+      setSelectedStrokeColor(event.target.value);
     },
-    [setSelectedColor],
+    [setSelectedStrokeColor],
+  );
+
+  const handleFillColorChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const nextColor = event.target.value;
+      lastFillColorRef.current = nextColor;
+      setSelectedFillColor(nextColor);
+    },
+    [setSelectedFillColor],
+  );
+
+  const handleFillToggle = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const enabled = event.target.checked;
+      if (enabled) {
+        setSelectedFillColor(lastFillColorRef.current);
+      } else {
+        if (selectedFillColor) {
+          lastFillColorRef.current = selectedFillColor;
+        }
+        setSelectedFillColor(null);
+      }
+    },
+    [selectedFillColor, setSelectedFillColor],
   );
 
   const isShapeToolActive = currentTool === 'shape';
+  const isFillEnabled = selectedFillColor !== null;
 
   return (
     <div className="control-panel">
@@ -57,15 +92,35 @@ const ControlPanel = () => {
               </select>
             </div>
             <div className="form-field">
-              <label htmlFor="shape-color">Color</label>
+              <label htmlFor="shape-stroke-color">Stroke Color</label>
               <input
-                id="shape-color"
+                id="shape-stroke-color"
                 type="color"
-                value={selectedColor}
-                onChange={handleColorChange}
-                aria-label="Shape color"
+                value={selectedStrokeColor}
+                onChange={handleStrokeColorChange}
+                aria-label="Shape stroke color"
               />
             </div>
+          <div className="form-field">
+            <label htmlFor="shape-fill-toggle" className="fill-toggle">
+              <input
+                id="shape-fill-toggle"
+                type="checkbox"
+                checked={isFillEnabled}
+                onChange={handleFillToggle}
+              />
+              <span>Enable Fill</span>
+            </label>
+            {isFillEnabled && (
+              <input
+                id="shape-fill-color"
+                type="color"
+                value={selectedFillColor ?? lastFillColorRef.current}
+                onChange={handleFillColorChange}
+                aria-label="Shape fill color"
+              />
+            )}
+          </div>
           </>
         ) : (
           <p>Controls for {currentTool} coming soon</p>

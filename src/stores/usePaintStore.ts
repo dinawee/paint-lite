@@ -4,11 +4,12 @@ import type { Layer, PaintStore, ToolType } from '../types/Tool';
 
 const initialState: Pick<
   PaintStore,
-  'currentTool' | 'layers' | 'selectedColor' | 'selectedShape' | 'showControlPanel' | 'canvasElement'
+  'currentTool' | 'layers' | 'selectedStrokeColor' | 'selectedFillColor' | 'selectedShape' | 'showControlPanel' | 'canvasElement'
 > = {
   currentTool: null,
   layers: [],
-  selectedColor: '#000000',
+  selectedStrokeColor: '#000000',
+  selectedFillColor: '#ff0000',
   selectedShape: 'rectangle',
   showControlPanel: false,
   canvasElement: null,
@@ -36,9 +37,14 @@ export const usePaintStore = create<PaintStore>((set) => ({
     logStoreChange('setCurrentTool', { tool });
   },
 
-  setSelectedColor: (color: string) => {
-    set(() => ({ selectedColor: color }));
-    logStoreChange('setSelectedColor', { color });
+  setSelectedStrokeColor: (color: string) => {
+    set(() => ({ selectedStrokeColor: color }));
+    logStoreChange('setSelectedStrokeColor', { color });
+  },
+
+  setSelectedFillColor: (color: string | null) => {
+    set(() => ({ selectedFillColor: color }));
+    logStoreChange('setSelectedFillColor', { color });
   },
 
   setSelectedShape: (shape) => {

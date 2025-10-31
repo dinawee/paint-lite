@@ -131,6 +131,18 @@
   gap: 0.25rem;
 }
 
+.fill-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.fill-toggle input {
+  margin: 0;
+}
+
 .form-field label {
   font-size: 0.875rem;
   color: #555;

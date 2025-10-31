@@ -21,26 +21,27 @@ export class ShapeTool implements Tool {
       return;
     }
 
-    const { selectedColor, selectedShape } = store;
+    const { selectedStrokeColor, selectedFillColor, selectedShape } = store;
     const x = event.offsetX;
     const y = event.offsetY;
 
     switch (selectedShape) {
       case 'circle':
-        placeCircle(canvas, x, y, selectedColor, SHAPE_DEFAULTS.circle);
+        placeCircle(canvas, x, y, selectedStrokeColor, selectedFillColor, SHAPE_DEFAULTS.circle);
         break;
       case 'rectangle':
         placeRectangle(
           canvas,
           x,
           y,
-          selectedColor,
+          selectedStrokeColor,
+          selectedFillColor,
           SHAPE_DEFAULTS.rectangle.width,
           SHAPE_DEFAULTS.rectangle.height,
         );
         break;
       case 'triangle':
-        placeTriangle(canvas, x, y, selectedColor, SHAPE_DEFAULTS.triangle);
+        placeTriangle(canvas, x, y, selectedStrokeColor, selectedFillColor, SHAPE_DEFAULTS.triangle);
         break;
       default:
         break;
@@ -52,7 +53,8 @@ export class ShapeTool implements Tool {
       createdAt: Date.now(),
       data: {
         shape: selectedShape,
-        color: selectedColor,
+        strokeColor: selectedStrokeColor,
+        fillColor: selectedFillColor,
         x,
         y,
         size:

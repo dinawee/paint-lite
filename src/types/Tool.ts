@@ -13,7 +13,8 @@ export interface Layer<TData = unknown> {
 
 export interface ShapeLayerData {
   shape: ShapeType;
-  color: string;
+  strokeColor: string;
+  fillColor: string;
   x: number;
   y: number;
   size: number;
@@ -21,7 +22,8 @@ export interface ShapeLayerData {
 
 export interface PaintState {
   currentTool: ToolType | null;
-  selectedColor: string;
+  selectedStrokeColor: string;
+  selectedFillColor: string | null;
   selectedShape: ShapeType;
   showControlPanel: boolean;
   layers: Layer[];
@@ -30,7 +32,8 @@ export interface PaintState {
 
 export interface PaintActions {
   setCurrentTool: (tool: ToolType | null) => void;
-  setSelectedColor: (color: string) => void;
+  setSelectedStrokeColor: (color: string) => void;
+  setSelectedFillColor: (color: string | null) => void;
   setSelectedShape: (shape: ShapeType) => void;
   setShowControlPanel: (visible: boolean) => void;
   setCanvasElement: (canvas: HTMLCanvasElement | null) => void;

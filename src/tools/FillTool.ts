@@ -7,13 +7,12 @@ export class FillTool implements Tool {
       console.debug('[FillTool] onMouseDown', {
         x: event.offsetX,
         y: event.offsetY,
-        color: store.selectedColor,
+        color: store.selectedFillColor,
       });
     }
   }
 
   onMouseMove(event: MouseEvent, store: PaintStore) {
-    console.log('fill mouse move')
     if (!import.meta.env.DEV) {
       return;
     }
@@ -22,7 +21,7 @@ export class FillTool implements Tool {
     console.debug('[FillTool] onMouseMove', {
       x: event.offsetX,
       y: event.offsetY,
-      color: store.selectedColor,
+      color: store.selectedFillColor,
     });
   }
 
@@ -32,7 +31,7 @@ export class FillTool implements Tool {
       console.debug('[FillTool] onMouseUp', {
         x: event.offsetX,
         y: event.offsetY,
-        color: store.selectedColor,
+        color: store.selectedFillColor,
       });
     }
   }
