@@ -1,8 +1,8 @@
-import { useCallback, useMemo } from 'react';
-import type { MouseEvent as ReactMouseEvent } from 'react';
-import { usePaintStore } from '../stores/usePaintStore';
-import { getToolByType } from '../tools/registry';
-import type { Tool } from '../types/Tool';
+import { useCallback, useMemo } from "react";
+import type { MouseEvent as ReactMouseEvent } from "react";
+import { usePaintStore } from "../stores/usePaintStore";
+import { getToolByType } from "../tools/registry";
+import type { Tool } from "../types/Tool";
 
 const noopHandler = (_event: ReactMouseEvent<HTMLCanvasElement>) => {};
 
@@ -10,7 +10,10 @@ const noopHandler = (_event: ReactMouseEvent<HTMLCanvasElement>) => {};
 export const useCanvasTool = () => {
   const currentToolType = usePaintStore((state) => state.currentTool);
 
-  const activeTool = useMemo<Tool | null>(() => getToolByType(currentToolType), [currentToolType]);
+  const activeTool = useMemo<Tool | null>(
+    () => getToolByType(currentToolType),
+    [currentToolType],
+  );
 
   const dispatchToolEvent = useCallback(
     (handler: keyof Tool, event: MouseEvent) => {
@@ -25,21 +28,21 @@ export const useCanvasTool = () => {
 
   const handleMouseDown = useCallback(
     (event: ReactMouseEvent<HTMLCanvasElement>) => {
-      dispatchToolEvent('onMouseDown', event.nativeEvent);
+      dispatchToolEvent("onMouseDown", event.nativeEvent);
     },
     [dispatchToolEvent],
   );
 
   const handleMouseMove = useCallback(
     (event: ReactMouseEvent<HTMLCanvasElement>) => {
-      dispatchToolEvent('onMouseMove', event.nativeEvent);
+      dispatchToolEvent("onMouseMove", event.nativeEvent);
     },
     [dispatchToolEvent],
   );
 
   const handleMouseUp = useCallback(
     (event: ReactMouseEvent<HTMLCanvasElement>) => {
-      dispatchToolEvent('onMouseUp', event.nativeEvent);
+      dispatchToolEvent("onMouseUp", event.nativeEvent);
     },
     [dispatchToolEvent],
   );

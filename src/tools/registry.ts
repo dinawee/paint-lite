@@ -1,6 +1,6 @@
-import type { Tool, ToolRegistry, ToolType } from '../types/Tool';
-import { FillTool } from './FillTool';
-import { ShapeTool } from './ShapeTool';
+import type { Tool, ToolRegistry, ToolType } from "../types/Tool";
+import { FillTool } from "./FillTool";
+import { ShapeTool } from "./ShapeTool";
 
 let registry: ToolRegistry | null = null;
 

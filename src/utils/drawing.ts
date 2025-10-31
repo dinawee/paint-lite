@@ -7,7 +7,7 @@ export const drawOnCanvas = (
   canvas: HTMLCanvasElement,
   drawFn: (ctx: CanvasRenderingContext2D) => void,
 ) => {
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
   if (!ctx) {
     return;
   }
@@ -99,4 +99,13 @@ export const SHAPE_DEFAULTS = {
     height: DEFAULT_RECT_HEIGHT,
   },
   triangle: DEFAULT_TRIANGLE_SIZE,
+};
+
+export const fillCanvas = (canvas: HTMLCanvasElement, color: string) => {
+  drawOnCanvas(canvas, (ctx) => {
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+  });
 };

@@ -1,24 +1,29 @@
-import { useMemo } from 'react';
-import { usePaintStore } from '../../stores/usePaintStore';
-import type { Layer, ShapeLayerData, FillLayerData } from '../../types/Tool';
+import { useMemo } from "react";
+import { usePaintStore } from "../../stores/usePaintStore";
+import type { Layer, ShapeLayerData, FillLayerData } from "../../types/Tool";
 
 const formatTimestamp = (timestamp?: number) => {
-  if (!timestamp) return '';
+  if (!timestamp) return "";
   return new Date(timestamp).toLocaleTimeString();
 };
 
 const isShapeLayer = (layer: Layer): layer is Layer<ShapeLayerData> => {
   return (
-    layer.type === 'shape' &&
+    layer.type === "shape" &&
     !!layer.data &&
-    typeof layer.data === 'object' &&
-    'shape' in layer.data &&
-    'strokeColor' in layer.data
+    typeof layer.data === "object" &&
+    "shape" in layer.data &&
+    "strokeColor" in layer.data
   );
 };
 
 const isFillLayer = (layer: Layer): layer is Layer<FillLayerData> => {
-  return layer.type === 'fill' && !!layer.data && typeof layer.data === 'object' && 'color' in layer.data;
+  return (
+    layer.type === "fill" &&
+    !!layer.data &&
+    typeof layer.data === "object" &&
+    "color" in layer.data
+  );
 };
 
 const LayersPanel = () => {
@@ -41,19 +46,23 @@ const LayersPanel = () => {
               return (
                 <li key={layer.id} className="layer-item">
                   <div className="layer-header">
-                    <span className="layer-type">{layer.type.toUpperCase()}</span>
-                    <span className="layer-time">{formatTimestamp(layer.createdAt)}</span>
+                    <span className="layer-type">
+                      {layer.type.toUpperCase()}
+                    </span>
+                    <span className="layer-time">
+                      {formatTimestamp(layer.createdAt)}
+                    </span>
                   </div>
                   {shapeData && (
                     <div className="layer-meta">
                       <span>Shape: {shapeData.shape}</span>
                       <span>Stroke: {shapeData.strokeColor}</span>
-                      <span>Fill: {shapeData.fillColor ?? 'none'}</span>
+                      <span>Fill: {shapeData.fillColor ?? "none"}</span>
                     </div>
                   )}
                   {fillData && (
                     <div className="layer-meta">
-                      <span>Fill color: {fillData.color ?? 'none'}</span>
+                      <span>Fill color: {fillData.color ?? "none"}</span>
                     </div>
                   )}
                 </li>

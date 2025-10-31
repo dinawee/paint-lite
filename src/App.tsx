@@ -1,9 +1,9 @@
-import './App.css'
-import { Canvas } from './components/Canvas'
-import { Header } from './components/common'
-import { ControlPanel } from './components/ControlPanel'
-import { LayersPanel } from './components/LayersPanel'
-import { Toolbar } from './components/Toolbar'
+import "./App.css";
+import { Canvas } from "./components/Canvas";
+import { Header } from "./components/common";
+import { ControlPanel } from "./components/ControlPanel";
+import { LayersPanel } from "./components/LayersPanel";
+import { Toolbar } from "./components/Toolbar";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
         <LayersPanel />
       </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

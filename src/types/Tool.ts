@@ -1,8 +1,8 @@
-export type ToolType = 'shape' | 'fill';
+export type ToolType = "shape" | "fill";
 
-export type ShapeType = 'circle' | 'rectangle' | 'triangle';
+export type ShapeType = "circle" | "rectangle" | "triangle";
 
-export type LayerType = 'shape' | 'fill';
+export type LayerType = "shape" | "fill";
 
 export interface Layer<TData = unknown> {
   id: string;
@@ -14,14 +14,14 @@ export interface Layer<TData = unknown> {
 export interface ShapeLayerData {
   shape: ShapeType;
   strokeColor: string;
-  fillColor: string;
+  fillColor: string | null;
   x: number;
   y: number;
   size: number;
 }
 
 export interface FillLayerData {
-  color: string;
+  color: string | null;
 }
 
 export interface PaintState {

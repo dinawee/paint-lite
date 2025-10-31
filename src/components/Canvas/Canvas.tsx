@@ -1,13 +1,17 @@
-import { useCallback, useEffect } from 'react';
-import type { CanvasProps, CanvasMouseEvent } from '../../types/Canvas';
-import { useCanvas } from '../../hooks/useCanvas';
-import { useCanvasTool } from '../../hooks/useCanvasTool';
-import { usePaintStore } from '../../stores/usePaintStore';
+import { useCallback, useEffect } from "react";
+import type { CanvasProps, CanvasMouseEvent } from "../../types/Canvas";
+import { useCanvas } from "../../hooks/useCanvas";
+import { useCanvasTool } from "../../hooks/useCanvasTool";
+import { usePaintStore } from "../../stores/usePaintStore";
 
-const Canvas = ({ width = 600, height = 400, className = '' }: CanvasProps) => {
+const Canvas = ({ width = 600, height = 400, className = "" }: CanvasProps) => {
   const { canvasRef, getCanvasCoordinates } = useCanvas();
   const { handlers, currentToolType } = useCanvasTool();
-  const { onMouseDown: toolMouseDown, onMouseMove: toolMouseMove, onMouseUp: toolMouseUp } = handlers;
+  const {
+    onMouseDown: toolMouseDown,
+    onMouseMove: toolMouseMove,
+    onMouseUp: toolMouseUp,
+  } = handlers;
   const setCanvasElement = usePaintStore((state) => state.setCanvasElement);
 
   useEffect(() => {
@@ -34,7 +38,7 @@ const Canvas = ({ width = 600, height = 400, className = '' }: CanvasProps) => {
 
       if (import.meta.env.DEV) {
         // eslint-disable-next-line no-console
-        console.debug('Canvas mousedown:', { canvasEvent, currentToolType });
+        console.debug("Canvas mousedown:", { canvasEvent, currentToolType });
       }
 
       toolMouseDown(event);
@@ -62,7 +66,7 @@ const Canvas = ({ width = 600, height = 400, className = '' }: CanvasProps) => {
 
       if (import.meta.env.DEV) {
         // eslint-disable-next-line no-console
-        console.debug('Canvas mouseup:', { canvasEvent, currentToolType });
+        console.debug("Canvas mouseup:", { canvasEvent, currentToolType });
       }
 
       toolMouseUp(event);
@@ -80,8 +84,8 @@ const Canvas = ({ width = 600, height = 400, className = '' }: CanvasProps) => {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         style={{
-          border: '1px solid #ccc',
-          cursor: currentToolType ? 'crosshair' : 'default',
+          border: "1px solid #ccc",
+          cursor: currentToolType ? "crosshair" : "default",
         }}
       />
     </div>
