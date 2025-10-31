@@ -63,4 +63,18 @@ export const usePaintStore = create<PaintStore>((set) => ({
       return { layers };
     });
   },
+
+  clearCanvas: () => {
+    set((state) => {
+      const { canvasElement } = state;
+      if (canvasElement) {
+        const ctx = canvasElement.getContext('2d');
+        if (ctx) {
+          ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+        }
+      }
+      logStoreChange('clearCanvas');
+      return { layers: [] };
+    });
+  },
 }));

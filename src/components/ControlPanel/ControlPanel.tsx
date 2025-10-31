@@ -14,6 +14,7 @@ const ControlPanel = () => {
   const selectedShape = usePaintStore((state) => state.selectedShape);
   const selectedColor = usePaintStore((state) => state.selectedColor);
   const setSelectedColor = usePaintStore((state) => state.setSelectedColor);
+  const clearCanvas = usePaintStore((state) => state.clearCanvas);
   const showControlPanel = usePaintStore((state) => state.showControlPanel);
 
   const handleShapeChange = useCallback(
@@ -34,6 +35,11 @@ const ControlPanel = () => {
 
   return (
     <div className="control-panel">
+      <div className="panel-toolbar">
+        <button type="button" className="clear-button" onClick={clearCanvas}>
+          Clear Canvas
+        </button>
+      </div>
       <h3>Tool Options</h3>
       <div className="control-content">
         {!showControlPanel || !currentTool ? (

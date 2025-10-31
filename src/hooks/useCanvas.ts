@@ -23,17 +23,9 @@ export const useCanvas = () => {
     };
   }, []);
 
-  const clearCanvas = useCallback(() => {
-    const ctx = getContext();
-    if (!ctx || !canvasRef.current) return;
-
-    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-  }, [getContext]);
-
   return {
     canvasRef,
     getContext,
     getCanvasCoordinates,
-    clearCanvas,
   };
 };
