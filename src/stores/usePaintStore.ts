@@ -1,0 +1,60 @@
+import { create } from 'zustand';
+
+import type { Layer, PaintStore, ToolType } from '../types/Tool';
+
+const initialState: Pick<
+  PaintStore,
+  'currentTool' | 'layers' | 'selectedColor' | 'selectedShape' | 'showControlPanel'
+> = {
+  currentTool: null,
+  layers: [],
+  selectedColor: '#000000',
+  selectedShape: 'rectangle',
+  showControlPanel: false,
+};
+
+const isDev = import.meta.env.DEV;
+
+const logStoreChange = (action: string, payload?: unknown) => {
+  if (!isDev) {
+    return;
+  }
+
+  // eslint-disable-next-line no-console
+  console.debug(`[PaintStore] ${action}`, payload);
+};
+
+export const usePaintStore = create<PaintStore>((set) => ({
+  ...initialState,
+
+  setCurrentTool: (tool: ToolType | null) => {
+    set(() => ({
+      currentTool: tool,
+      showControlPanel: Boolean(tool),
+    }));
+    logStoreChange('setCurrentTool', { tool });
+  },
+
+  setSelectedColor: (color: string) => {
+    set(() => ({ selectedColor: color }));
+    logStoreChange('setSelectedColor', { color });
+  },
+
+  setSelectedShape: (shape) => {
+    set(() => ({ selectedShape: shape }));
+    logStoreChange('setSelectedShape', { shape });
+  },
+
+  setShowControlPanel: (visible: boolean) => {
+    set(() => ({ showControlPanel: visible }));
+    logStoreChange('setShowControlPanel', { visible });
+  },
+  
+  addLayer: (layer: Layer) => {
+    set((state) => {
+      const layers = [...state.layers, layer];
+      logStoreChange('addLayer', { layerCount: layers.length });
+      return { layers };
+    });
+  },
+}));
