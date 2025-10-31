@@ -20,6 +20,10 @@ export interface ShapeLayerData {
   size: number;
 }
 
+export interface FillLayerData {
+  color: string;
+}
+
 export interface PaintState {
   currentTool: ToolType | null;
   selectedStrokeColor: string;
