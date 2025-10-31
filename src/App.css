@@ -104,3 +104,23 @@
   color: white;
   border-color: #007bff;
 }
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-field label {
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.form-field select,
+.form-field input[type="color"] {
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #555;
+}

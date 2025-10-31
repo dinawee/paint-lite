@@ -1,10 +1,48 @@
+import { ChangeEvent, useCallback } from 'react';
+import { usePaintStore } from '../../stores/usePaintStore';
+import type { ShapeType } from '../../types/Tool';
+
+const SHAPE_OPTIONS: Array<{ value: ShapeType; label: string }> = [
+  { value: 'circle', label: 'Circle' },
+  { value: 'rectangle', label: 'Rectangle' },
+  { value: 'triangle', label: 'Triangle' },
+];
+
 const ControlPanel = () => {
+  const currentTool = usePaintStore((state) => state.currentTool);
+  const setSelectedShape = usePaintStore((state) => state.setSelectedShape);
+  const selectedShape = usePaintStore((state) => state.selectedShape);
+  const showControlPanel = usePaintStore((state) => state.showControlPanel);
+
+  const handleShapeChange = useCallback(
+    (event: ChangeEvent<HTMLSelectElement>) => {
+      setSelectedShape(event.target.value as ShapeType);
+    },
+    [setSelectedShape],
+  );
+
+  const isShapeToolActive = currentTool === 'shape';
+
   return (
     <div className="control-panel">
       <h3>Tool Options</h3>
       <div className="control-content">
-        <p>No tool selected</p>
-        {/* tool controls */}
+        {!showControlPanel || !currentTool ? (
+          <p>No tool selected</p>
+        ) : isShapeToolActive ? (
+          <div className="form-field">
+            <label htmlFor="shape-select">Shape</label>
+            <select id="shape-select" value={selectedShape} onChange={handleShapeChange}>
+              {SHAPE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : (
+          <p>Controls for {currentTool} coming soon</p>
+        )}
       </div>
     </div>
   );
