@@ -1,45 +1,75 @@
-import type { Tool, PaintStore } from '../types/Tool';
+import type { PaintStore, Tool } from '../types/Tool';
+import { placeCircle, placeRectangle, placeTriangle, SHAPE_DEFAULTS } from '../utils/drawing';
 
-export class ShapeTool implements Tool {
-  private isDrawing = false;
-
-  onMouseDown(event: MouseEvent, store: PaintStore) {
-    this.isDrawing = true;
-    if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console
-      console.debug('[ShapeTool] onMouseDown', {
-        x: event.offsetX,
-        y: event.offsetY,
-        color: store.selectedColor,
-        shape: store.selectedShape,
-      });
-    }
+const generateLayerId = () => {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
   }
 
-  onMouseMove(event: MouseEvent, store: PaintStore) {
-    if (!this.isDrawing || !import.meta.env.DEV) {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+};
+
+export class ShapeTool implements Tool {
+  onMouseDown(event: MouseEvent, store: PaintStore) {
+    const canvas = store.canvasElement;
+
+    if (!canvas) {
+      if (import.meta.env.DEV) {
+        // eslint-disable-next-line no-console
+        console.warn('[ShapeTool] Missing canvas reference; cannot draw');
+      }
       return;
     }
 
-    // eslint-disable-next-line no-console
-    console.debug('[ShapeTool] onMouseMove', {
-      x: event.offsetX,
-      y: event.offsetY,
-      color: store.selectedColor,
-      shape: store.selectedShape,
+    const { selectedColor, selectedShape } = store;
+    const x = event.offsetX;
+    const y = event.offsetY;
+
+    switch (selectedShape) {
+      case 'circle':
+        placeCircle(canvas, x, y, selectedColor, SHAPE_DEFAULTS.circle);
+        break;
+      case 'rectangle':
+        placeRectangle(
+          canvas,
+          x,
+          y,
+          selectedColor,
+          SHAPE_DEFAULTS.rectangle.width,
+          SHAPE_DEFAULTS.rectangle.height,
+        );
+        break;
+      case 'triangle':
+        placeTriangle(canvas, x, y, selectedColor, SHAPE_DEFAULTS.triangle);
+        break;
+      default:
+        break;
+    }
+
+    store.addLayer({
+      id: generateLayerId(),
+      type: 'shape',
+      createdAt: Date.now(),
+      data: {
+        shape: selectedShape,
+        color: selectedColor,
+        x,
+        y,
+        size:
+          selectedShape === 'rectangle'
+            ? Math.max(SHAPE_DEFAULTS.rectangle.width, SHAPE_DEFAULTS.rectangle.height)
+            : selectedShape === 'circle'
+            ? SHAPE_DEFAULTS.circle * 2
+            : SHAPE_DEFAULTS.triangle,
+      },
     });
   }
 
-  onMouseUp(event: MouseEvent, store: PaintStore) {
-    if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console
-      console.debug('[ShapeTool] onMouseUp', {
-        x: event.offsetX,
-        y: event.offsetY,
-        color: store.selectedColor,
-        shape: store.selectedShape,
-      });
-    }
-    this.isDrawing = false;
+  onMouseMove() {
+    // Click-to-place interaction does not track mouse move.
+  }
+
+  onMouseUp() {
+    // No-op for click-to-place tool.
   }
 }

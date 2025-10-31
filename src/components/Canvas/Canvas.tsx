@@ -1,12 +1,21 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import type { CanvasProps, CanvasMouseEvent } from '../../types/Canvas';
 import { useCanvas } from '../../hooks/useCanvas';
 import { useCanvasTool } from '../../hooks/useCanvasTool';
+import { usePaintStore } from '../../stores/usePaintStore';
 
 const Canvas = ({ width = 600, height = 400, className = '' }: CanvasProps) => {
   const { canvasRef, getCanvasCoordinates } = useCanvas();
   const { handlers, currentToolType } = useCanvasTool();
   const { onMouseDown: toolMouseDown, onMouseMove: toolMouseMove, onMouseUp: toolMouseUp } = handlers;
+  const setCanvasElement = usePaintStore((state) => state.setCanvasElement);
+
+  useEffect(() => {
+    const canvas = canvasRef.current ?? null;
+    setCanvasElement(canvas);
+
+    return () => setCanvasElement(null);
+  }, [canvasRef, setCanvasElement]);
 
   const buildCanvasEvent = useCallback(
     (event: React.MouseEvent<HTMLCanvasElement>): CanvasMouseEvent => {
@@ -39,7 +48,7 @@ const Canvas = ({ width = 600, height = 400, className = '' }: CanvasProps) => {
 
       if (import.meta.env.DEV) {
         // eslint-disable-next-line no-console
-        console.debug('Canvas mousemove:', { canvasEvent, currentToolType });
+        // console.debug('Canvas mousemove:', { canvasEvent, currentToolType });
       }
 
       toolMouseMove(event);

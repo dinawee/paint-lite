@@ -4,13 +4,14 @@ import type { Layer, PaintStore, ToolType } from '../types/Tool';
 
 const initialState: Pick<
   PaintStore,
-  'currentTool' | 'layers' | 'selectedColor' | 'selectedShape' | 'showControlPanel'
+  'currentTool' | 'layers' | 'selectedColor' | 'selectedShape' | 'showControlPanel' | 'canvasElement'
 > = {
   currentTool: null,
   layers: [],
   selectedColor: '#000000',
   selectedShape: 'rectangle',
   showControlPanel: false,
+  canvasElement: null,
 };
 
 const isDev = import.meta.env.DEV;
@@ -49,7 +50,12 @@ export const usePaintStore = create<PaintStore>((set) => ({
     set(() => ({ showControlPanel: visible }));
     logStoreChange('setShowControlPanel', { visible });
   },
-  
+
+  setCanvasElement: (canvas: HTMLCanvasElement | null) => {
+    set(() => ({ canvasElement: canvas }));
+    logStoreChange('setCanvasElement', { registered: Boolean(canvas) });
+  },
+
   addLayer: (layer: Layer) => {
     set((state) => {
       const layers = [...state.layers, layer];

@@ -11,12 +11,21 @@ export interface Layer<TData = unknown> {
   createdAt?: number;
 }
 
+export interface ShapeLayerData {
+  shape: ShapeType;
+  color: string;
+  x: number;
+  y: number;
+  size: number;
+}
+
 export interface PaintState {
   currentTool: ToolType | null;
   selectedColor: string;
   selectedShape: ShapeType;
   showControlPanel: boolean;
   layers: Layer[];
+  canvasElement: HTMLCanvasElement | null;
 }
 
 export interface PaintActions {
@@ -24,6 +33,7 @@ export interface PaintActions {
   setSelectedColor: (color: string) => void;
   setSelectedShape: (shape: ShapeType) => void;
   setShowControlPanel: (visible: boolean) => void;
+  setCanvasElement: (canvas: HTMLCanvasElement | null) => void;
   addLayer: (layer: Layer) => void;
 }
 
