@@ -1,13 +1,11 @@
-import type { PaintStore, Tool } from '../types/Tool';
-import { placeCircle, placeRectangle, placeTriangle, SHAPE_DEFAULTS } from '../utils/drawing';
-
-const generateLayerId = () => {
-  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return crypto.randomUUID();
-  }
-
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-};
+import type { PaintStore, Tool } from "../types/Tool";
+import {
+  placeCircle,
+  placeRectangle,
+  placeTriangle,
+  SHAPE_DEFAULTS,
+} from "../utils/drawing";
+import { generateLayerId } from "../utils/layers";
 
 export class ShapeTool implements Tool {
   onMouseDown(event: MouseEvent, store: PaintStore) {
@@ -16,7 +14,7 @@ export class ShapeTool implements Tool {
     if (!canvas) {
       if (import.meta.env.DEV) {
         // eslint-disable-next-line no-console
-        console.warn('[ShapeTool] Missing canvas reference; cannot draw');
+        console.warn("[ShapeTool] Missing canvas reference; cannot draw");
       }
       return;
     }
@@ -26,10 +24,17 @@ export class ShapeTool implements Tool {
     const y = event.offsetY;
 
     switch (selectedShape) {
-      case 'circle':
-        placeCircle(canvas, x, y, selectedStrokeColor, selectedFillColor, SHAPE_DEFAULTS.circle);
+      case "circle":
+        placeCircle(
+          canvas,
+          x,
+          y,
+          selectedStrokeColor,
+          selectedFillColor,
+          SHAPE_DEFAULTS.circle,
+        );
         break;
-      case 'rectangle':
+      case "rectangle":
         placeRectangle(
           canvas,
           x,
@@ -40,8 +45,15 @@ export class ShapeTool implements Tool {
           SHAPE_DEFAULTS.rectangle.height,
         );
         break;
-      case 'triangle':
-        placeTriangle(canvas, x, y, selectedStrokeColor, selectedFillColor, SHAPE_DEFAULTS.triangle);
+      case "triangle":
+        placeTriangle(
+          canvas,
+          x,
+          y,
+          selectedStrokeColor,
+          selectedFillColor,
+          SHAPE_DEFAULTS.triangle,
+        );
         break;
       default:
         break;
@@ -49,7 +61,7 @@ export class ShapeTool implements Tool {
 
     store.addLayer({
       id: generateLayerId(),
-      type: 'shape',
+      type: "shape",
       createdAt: Date.now(),
       data: {
         shape: selectedShape,
@@ -58,11 +70,14 @@ export class ShapeTool implements Tool {
         x,
         y,
         size:
-          selectedShape === 'rectangle'
-            ? Math.max(SHAPE_DEFAULTS.rectangle.width, SHAPE_DEFAULTS.rectangle.height)
-            : selectedShape === 'circle'
-            ? SHAPE_DEFAULTS.circle * 2
-            : SHAPE_DEFAULTS.triangle,
+          selectedShape === "rectangle"
+            ? Math.max(
+                SHAPE_DEFAULTS.rectangle.width,
+                SHAPE_DEFAULTS.rectangle.height,
+              )
+            : selectedShape === "circle"
+              ? SHAPE_DEFAULTS.circle * 2
+              : SHAPE_DEFAULTS.triangle,
       },
     });
   }

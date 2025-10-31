@@ -1,38 +1,31 @@
-import type { Tool, PaintStore } from '../types/Tool';
+import type { Tool, PaintStore } from "../types/Tool";
+import { fillCanvas } from "../utils/drawing";
+import { generateLayerId } from "../utils/layers";
 
 export class FillTool implements Tool {
   onMouseDown(event: MouseEvent, store: PaintStore) {
-    if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console
-      console.debug('[FillTool] onMouseDown', {
-        x: event.offsetX,
-        y: event.offsetY,
-        color: store.selectedFillColor,
-      });
-    }
-  }
+    const canvas = store.canvasElement;
+    const fillColor = store.selectedFillColor;
 
-  onMouseMove(event: MouseEvent, store: PaintStore) {
-    if (!import.meta.env.DEV) {
+    if (!canvas || !fillColor) {
       return;
     }
 
-    // eslint-disable-next-line no-console
-    console.debug('[FillTool] onMouseMove', {
-      x: event.offsetX,
-      y: event.offsetY,
-      color: store.selectedFillColor,
+    fillCanvas(canvas, fillColor);
+
+    store.addLayer({
+      id: generateLayerId(),
+      type: "fill",
+      createdAt: Date.now(),
+      data: { color: fillColor },
     });
   }
 
-  onMouseUp(event: MouseEvent, store: PaintStore) {
-    if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console
-      console.debug('[FillTool] onMouseUp', {
-        x: event.offsetX,
-        y: event.offsetY,
-        color: store.selectedFillColor,
-      });
-    }
+  onMouseMove() {
+    // Click-to-place interaction does not track mouse move.
+  }
+
+  onMouseUp() {
+    // Click-to-place interaction does not track mouse move.
   }
 }

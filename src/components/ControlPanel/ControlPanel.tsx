@@ -1,21 +1,27 @@
-import { ChangeEvent, useCallback, useEffect, useRef } from 'react';
-import { usePaintStore } from '../../stores/usePaintStore';
-import type { ShapeType } from '../../types/Tool';
+import { ChangeEvent, useCallback, useEffect, useRef } from "react";
+import { usePaintStore } from "../../stores/usePaintStore";
+import type { ShapeType } from "../../types/Tool";
 
 const SHAPE_OPTIONS: Array<{ value: ShapeType; label: string }> = [
-  { value: 'circle', label: 'Circle' },
-  { value: 'rectangle', label: 'Rectangle' },
-  { value: 'triangle', label: 'Triangle' },
+  { value: "circle", label: "Circle" },
+  { value: "rectangle", label: "Rectangle" },
+  { value: "triangle", label: "Triangle" },
 ];
 
 const ControlPanel = () => {
   const currentTool = usePaintStore((state) => state.currentTool);
   const setSelectedShape = usePaintStore((state) => state.setSelectedShape);
   const selectedShape = usePaintStore((state) => state.selectedShape);
-  const selectedStrokeColor = usePaintStore((state) => state.selectedStrokeColor);
-  const setSelectedStrokeColor = usePaintStore((state) => state.setSelectedStrokeColor);
+  const selectedStrokeColor = usePaintStore(
+    (state) => state.selectedStrokeColor,
+  );
+  const setSelectedStrokeColor = usePaintStore(
+    (state) => state.setSelectedStrokeColor,
+  );
   const selectedFillColor = usePaintStore((state) => state.selectedFillColor);
-  const setSelectedFillColor = usePaintStore((state) => state.setSelectedFillColor);
+  const setSelectedFillColor = usePaintStore(
+    (state) => state.setSelectedFillColor,
+  );
   const clearCanvas = usePaintStore((state) => state.clearCanvas);
   const showControlPanel = usePaintStore((state) => state.showControlPanel);
 
@@ -26,7 +32,7 @@ const ControlPanel = () => {
     [setSelectedShape],
   );
 
-  const lastFillColorRef = useRef<string>(selectedFillColor ?? '#ff0000');
+  const lastFillColorRef = useRef<string>(selectedFillColor ?? "#ff0000");
 
   useEffect(() => {
     if (selectedFillColor) {
@@ -65,8 +71,15 @@ const ControlPanel = () => {
     [selectedFillColor, setSelectedFillColor],
   );
 
-  const isShapeToolActive = currentTool === 'shape';
+  const isShapeToolActive = currentTool === "shape";
+  const isFillToolActive = currentTool === "fill";
   const isFillEnabled = selectedFillColor !== null;
+
+  useEffect(() => {
+    if (isFillToolActive && selectedFillColor === null) {
+      setSelectedFillColor(lastFillColorRef.current);
+    }
+  }, [isFillToolActive, selectedFillColor, setSelectedFillColor]);
 
   return (
     <div className="control-panel">
@@ -83,7 +96,11 @@ const ControlPanel = () => {
           <>
             <div className="form-field">
               <label htmlFor="shape-select">Shape</label>
-              <select id="shape-select" value={selectedShape} onChange={handleShapeChange}>
+              <select
+                id="shape-select"
+                value={selectedShape}
+                onChange={handleShapeChange}
+              >
                 {SHAPE_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -101,27 +118,38 @@ const ControlPanel = () => {
                 aria-label="Shape stroke color"
               />
             </div>
-          <div className="form-field">
-            <label htmlFor="shape-fill-toggle" className="fill-toggle">
-              <input
-                id="shape-fill-toggle"
-                type="checkbox"
-                checked={isFillEnabled}
-                onChange={handleFillToggle}
-              />
-              <span>Enable Fill</span>
-            </label>
-            {isFillEnabled && (
-              <input
-                id="shape-fill-color"
-                type="color"
-                value={selectedFillColor ?? lastFillColorRef.current}
-                onChange={handleFillColorChange}
-                aria-label="Shape fill color"
-              />
-            )}
-          </div>
+            <div className="form-field">
+              <label htmlFor="shape-fill-toggle" className="fill-toggle">
+                <input
+                  id="shape-fill-toggle"
+                  type="checkbox"
+                  checked={isFillEnabled}
+                  onChange={handleFillToggle}
+                />
+                <span>Enable Fill</span>
+              </label>
+              {isFillEnabled && (
+                <input
+                  id="shape-fill-color"
+                  type="color"
+                  value={selectedFillColor ?? lastFillColorRef.current}
+                  onChange={handleFillColorChange}
+                  aria-label="Shape fill color"
+                />
+              )}
+            </div>
           </>
+        ) : isFillToolActive ? (
+          <div className="form-field">
+            <label htmlFor="fill-tool-color">Fill Color</label>
+            <input
+              id="fill-tool-color"
+              type="color"
+              value={selectedFillColor ?? lastFillColorRef.current}
+              onChange={handleFillColorChange}
+              aria-label="Fill tool color"
+            />
+          </div>
         ) : (
           <p>Controls for {currentTool} coming soon</p>
         )}
