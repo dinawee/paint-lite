@@ -1,15 +1,28 @@
+import type { CanvasMouseEvent } from "./Canvas";
+
 export type ToolType = "shape" | "fill";
 
-export type ShapeType = "circle" | "rectangle" | "triangle";
-
-export type LayerType = "shape" | "fill";
-
-export interface Layer<TData = unknown> {
-  id: string;
-  type: LayerType;
-  data?: TData;
-  createdAt?: number;
+export interface Tool {
+  onMouseDown: (
+    event: CanvasMouseEvent,
+    store: PaintStore,
+    canvas: HTMLCanvasElement,
+  ) => void;
+  onMouseMove: (
+    event: CanvasMouseEvent,
+    store: PaintStore,
+    canvas: HTMLCanvasElement,
+  ) => void;
+  onMouseUp: (
+    event: CanvasMouseEvent,
+    store: PaintStore,
+    canvas: HTMLCanvasElement,
+  ) => void;
 }
+
+export type ToolRegistry = Partial<Record<ToolType, Tool>>;
+
+export type ShapeType = "circle" | "rectangle" | "triangle";
 
 export interface ShapeLayerData {
   shape: ShapeType;
@@ -20,11 +33,20 @@ export interface ShapeLayerData {
   size: number;
 }
 
+export type LayerType = "shape" | "fill";
+
+export interface Layer<TData = unknown> {
+  id: string;
+  type: LayerType;
+  data?: TData;
+  createdAt?: number;
+}
+
 export interface FillLayerData {
   color: string | null;
 }
 
-export interface PaintState {
+interface PaintState {
   currentTool: ToolType | null;
   selectedStrokeColor: string;
   selectedFillColor: string | null;
@@ -34,7 +56,7 @@ export interface PaintState {
   canvasElement: HTMLCanvasElement | null;
 }
 
-export interface PaintActions {
+interface PaintActions {
   setCurrentTool: (tool: ToolType | null) => void;
   setSelectedStrokeColor: (color: string) => void;
   setSelectedFillColor: (color: string | null) => void;
@@ -44,13 +66,5 @@ export interface PaintActions {
   addLayer: (layer: Layer) => void;
   clearLayers: () => void;
 }
-
-export interface Tool {
-  onMouseDown: (event: MouseEvent, store: PaintStore) => void;
-  onMouseMove: (event: MouseEvent, store: PaintStore) => void;
-  onMouseUp: (event: MouseEvent, store: PaintStore) => void;
-}
-
-export type ToolRegistry = Partial<Record<ToolType, Tool>>;
 
 export type PaintStore = PaintState & PaintActions;

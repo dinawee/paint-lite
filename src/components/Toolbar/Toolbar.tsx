@@ -1,18 +1,17 @@
 import classNames from "classnames";
-import { useCallback } from "react";
 import { usePaintStore } from "../../stores/usePaintStore";
 
 const Toolbar = () => {
   const currentTool = usePaintStore((state) => state.currentTool);
   const setCurrentTool = usePaintStore((state) => state.setCurrentTool);
 
-  const handleShapeClick = useCallback(() => {
+  const handleShapeClick = () => {
     setCurrentTool(currentTool === "shape" ? null : "shape");
-  }, [currentTool, setCurrentTool]);
+  };
 
-  const handleFillClick = useCallback(() => {
+  const handleFillClick = () => {
     setCurrentTool(currentTool === "fill" ? null : "fill");
-  }, [currentTool, setCurrentTool]);
+  };
 
   return (
     <div className="toolbar">

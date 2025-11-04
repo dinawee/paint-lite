@@ -11,5 +11,4 @@ export interface CanvasCoordinates {
 
 export interface CanvasMouseEvent {
   coordinates: CanvasCoordinates;
-  originalEvent: MouseEvent;
 }

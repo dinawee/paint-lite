@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import type { CanvasProps, CanvasMouseEvent } from "../../types/Canvas";
 import { useCanvas } from "../../hooks/useCanvas";
 import { useCanvasTool } from "../../hooks/useCanvasTool";
@@ -21,58 +21,44 @@ const Canvas = ({ width = 600, height = 400, className = "" }: CanvasProps) => {
     return () => setCanvasElement(null);
   }, [canvasRef, setCanvasElement]);
 
-  const buildCanvasEvent = useCallback(
-    (event: React.MouseEvent<HTMLCanvasElement>): CanvasMouseEvent => {
-      const coordinates = getCanvasCoordinates(event.nativeEvent);
-      return {
-        coordinates,
-        originalEvent: event.nativeEvent,
-      };
-    },
-    [getCanvasCoordinates],
-  );
+  const buildCanvasEvent = (
+    event: React.MouseEvent<HTMLCanvasElement>,
+  ): CanvasMouseEvent => {
+    const coordinates = getCanvasCoordinates(event.nativeEvent);
+    return {
+      coordinates,
+    };
+  };
 
-  const handleMouseDown = useCallback(
-    (event: React.MouseEvent<HTMLCanvasElement>) => {
-      const canvasEvent = buildCanvasEvent(event);
+  const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvasEvent = buildCanvasEvent(event);
 
-      if (import.meta.env.DEV) {
-        // eslint-disable-next-line no-console
-        console.debug("Canvas mousedown:", { canvasEvent, currentToolType });
-      }
+    if (import.meta.env.DEV) {
+      console.debug("Canvas mousedown:", { canvasEvent, currentToolType });
+    }
 
-      toolMouseDown(event);
-    },
-    [buildCanvasEvent, currentToolType, toolMouseDown],
-  );
+    toolMouseDown(canvasEvent);
+  };
 
-  const handleMouseMove = useCallback(
-    (event: React.MouseEvent<HTMLCanvasElement>) => {
-      const canvasEvent = buildCanvasEvent(event);
+  const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvasEvent = buildCanvasEvent(event);
 
-      if (import.meta.env.DEV) {
-        // eslint-disable-next-line no-console
-        // console.debug('Canvas mousemove:', { canvasEvent, currentToolType });
-      }
+    if (import.meta.env.DEV) {
+      // console.debug('Canvas mousemove:', { canvasEvent, currentToolType });
+    }
 
-      toolMouseMove(event);
-    },
-    [buildCanvasEvent, currentToolType, toolMouseMove],
-  );
+    toolMouseMove(canvasEvent);
+  };
 
-  const handleMouseUp = useCallback(
-    (event: React.MouseEvent<HTMLCanvasElement>) => {
-      const canvasEvent = buildCanvasEvent(event);
+  const handleMouseUp = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvasEvent = buildCanvasEvent(event);
 
-      if (import.meta.env.DEV) {
-        // eslint-disable-next-line no-console
-        console.debug("Canvas mouseup:", { canvasEvent, currentToolType });
-      }
+    if (import.meta.env.DEV) {
+      console.debug("Canvas mouseup:", { canvasEvent, currentToolType });
+    }
 
-      toolMouseUp(event);
-    },
-    [buildCanvasEvent, currentToolType, toolMouseUp],
-  );
+    toolMouseUp(canvasEvent);
+  };
 
   return (
     <div className={`${className}`}>

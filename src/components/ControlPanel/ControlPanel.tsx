@@ -1,6 +1,8 @@
-import { ChangeEvent, useCallback, useEffect, useRef } from "react";
+import type { ChangeEvent } from "react";
+import { useEffect, useRef } from "react";
 import { usePaintStore } from "../../stores/usePaintStore";
 import type { ShapeType } from "../../types/Tool";
+import { clearCanvas } from "../../utils/drawing";
 
 const SHAPE_OPTIONS: Array<{ value: ShapeType; label: string }> = [
   { value: "circle", label: "Circle" },
@@ -26,12 +28,9 @@ const ControlPanel = () => {
   const canvas = usePaintStore((state) => state.canvasElement);
   const showControlPanel = usePaintStore((state) => state.showControlPanel);
 
-  const handleShapeChange = useCallback(
-    (event: ChangeEvent<HTMLSelectElement>) => {
-      setSelectedShape(event.target.value as ShapeType);
-    },
-    [setSelectedShape],
-  );
+  const handleShapeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedShape(event.target.value as ShapeType);
+  };
 
   const lastFillColorRef = useRef<string>(selectedFillColor ?? "#ff0000");
 
@@ -41,33 +40,28 @@ const ControlPanel = () => {
     }
   }, [selectedFillColor]);
 
-  const handleStrokeColorChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setSelectedStrokeColor(event.target.value);
-    },
-    [setSelectedStrokeColor],
-  );
+  const handleStrokeColorChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSelectedStrokeColor(event.target.value);
+  };
 
-  const handleFillColorChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const nextColor = event.target.value;
-      lastFillColorRef.current = nextColor;
-      setSelectedFillColor(nextColor);
-    },
-    [setSelectedFillColor],
-  );
+  const handleFillColorChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextColor = event.target.value;
+    lastFillColorRef.current = nextColor;
+    setSelectedFillColor(nextColor);
+  };
 
-  const handleFillToggle = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const enabled = event.target.checked;
-      if (enabled) {
-        setSelectedFillColor(lastFillColorRef.current);
-      } else {
-        if (selectedFillColor) {
-          lastFillColorRef.current = selectedFillColor;
-        }
-        setSelectedFillColor(null);
+  const handleFillToggle = (event: ChangeEvent<HTMLInputElement>) => {
+    const enabled = event.target.checked;
+    if (enabled) {
+      setSelectedFillColor(lastFillColorRef.current);
+    } else {
+      if (selectedFillColor) {
+        lastFillColorRef.current = selectedFillColor;
       }
+      setSelectedFillColor(null);
+    }
+  };
+
   const handleClearCanvas = () => {
     clearCanvas(canvas);
     clearLayers();
@@ -94,7 +88,7 @@ const ControlPanel = () => {
           Clear Canvas
         </button>
       </div>
-      <h3>Tool Options</h3>
+      {showControlPanel ? <h3>Tool Options</h3> : null}
       <div className="control-content">
         {!showControlPanel || !currentTool ? (
           <p>No tool selected</p>

@@ -1,10 +1,11 @@
-import { useCallback, useMemo } from "react";
-import type { MouseEvent as ReactMouseEvent } from "react";
+import { useMemo } from "react";
 import { usePaintStore } from "../stores/usePaintStore";
 import { getToolByType } from "../tools/registry";
 import type { Tool } from "../types/Tool";
+import type { CanvasMouseEvent } from "../types/Canvas";
 
-const noopHandler = (_event: ReactMouseEvent<HTMLCanvasElement>) => {};
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const noopHandler = (_: CanvasMouseEvent) => {};
 
 // the useCanvasTool hook functions as an intermediary between the canvas component and the specific tool implementation
 export const useCanvasTool = () => {
@@ -15,37 +16,34 @@ export const useCanvasTool = () => {
     [currentToolType],
   );
 
-  const dispatchToolEvent = useCallback(
-    (handler: keyof Tool, event: MouseEvent) => {
-      if (!activeTool) {
-        return;
+  const dispatchToolEvent = (handler: keyof Tool, event: CanvasMouseEvent) => {
+    if (!activeTool) {
+      return;
+    }
+
+    const store = usePaintStore.getState();
+    const canvas = store.canvasElement;
+    if (!canvas) {
+      if (import.meta.env.DEV) {
+        console.warn("[ToolEvent] Missing canvas reference; cannot draw");
       }
-      const store = usePaintStore.getState();
-      activeTool[handler](event, store);
-    },
-    [activeTool],
-  );
+      return;
+    }
 
-  const handleMouseDown = useCallback(
-    (event: ReactMouseEvent<HTMLCanvasElement>) => {
-      dispatchToolEvent("onMouseDown", event.nativeEvent);
-    },
-    [dispatchToolEvent],
-  );
+    activeTool[handler](event, store, canvas);
+  };
 
-  const handleMouseMove = useCallback(
-    (event: ReactMouseEvent<HTMLCanvasElement>) => {
-      dispatchToolEvent("onMouseMove", event.nativeEvent);
-    },
-    [dispatchToolEvent],
-  );
+  const handleMouseDown = (event: CanvasMouseEvent) => {
+    dispatchToolEvent("onMouseDown", event);
+  };
 
-  const handleMouseUp = useCallback(
-    (event: ReactMouseEvent<HTMLCanvasElement>) => {
-      dispatchToolEvent("onMouseUp", event.nativeEvent);
-    },
-    [dispatchToolEvent],
-  );
+  const handleMouseMove = (event: CanvasMouseEvent) => {
+    dispatchToolEvent("onMouseMove", event);
+  };
+
+  const handleMouseUp = (event: CanvasMouseEvent) => {
+    dispatchToolEvent("onMouseUp", event);
+  };
 
   return {
     currentToolType,

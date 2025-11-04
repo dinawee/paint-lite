@@ -28,7 +28,6 @@ const logStoreChange = (action: string, payload?: unknown) => {
     return;
   }
 
-  // eslint-disable-next-line no-console
   console.debug(`[PaintStore] ${action}`, payload);
 };
 

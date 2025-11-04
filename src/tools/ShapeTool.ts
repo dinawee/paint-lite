@@ -6,22 +6,26 @@ import {
   SHAPE_DEFAULTS,
 } from "../utils/drawing";
 import { generateLayerId } from "../utils/layers";
+import type { CanvasMouseEvent } from "../types/Canvas";
 
 export class ShapeTool implements Tool {
-  onMouseDown(event: MouseEvent, store: PaintStore) {
-    const canvas = store.canvasElement;
+  onMouseDown(
+    event: CanvasMouseEvent,
+    store: PaintStore,
+    canvas: HTMLCanvasElement,
+  ) {
+    const { selectedStrokeColor, selectedFillColor, selectedShape } = store;
 
-    if (!canvas) {
+    if (!selectedStrokeColor || !selectedShape) {
       if (import.meta.env.DEV) {
-        // eslint-disable-next-line no-console
-        console.warn("[ShapeTool] Missing canvas reference; cannot draw");
+        console.warn(
+          "[ShapeTool] Missing color or shape reference; cannot draw",
+        );
       }
       return;
     }
 
-    const { selectedStrokeColor, selectedFillColor, selectedShape } = store;
-    const x = event.offsetX;
-    const y = event.offsetY;
+    const { x, y } = event.coordinates;
 
     switch (selectedShape) {
       case "circle":
@@ -83,10 +87,10 @@ export class ShapeTool implements Tool {
   }
 
   onMouseMove() {
-    // Click-to-place interaction does not track mouse move.
+    // Not tracked
   }
 
   onMouseUp() {
-    // No-op for click-to-place tool.
+    // Not tracked
   }
 }
