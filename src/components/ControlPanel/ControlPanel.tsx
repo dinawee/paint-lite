@@ -125,6 +125,7 @@ const ControlPanel = () => {
                   type="checkbox"
                   checked={isFillEnabled}
                   onChange={handleFillToggle}
+                  aria-label="Shape fill toggle"
                 />
                 <span>Enable Fill</span>
               </label>

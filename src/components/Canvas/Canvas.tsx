@@ -43,10 +43,6 @@ const Canvas = ({ width = 600, height = 400, className = "" }: CanvasProps) => {
   const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const canvasEvent = buildCanvasEvent(event);
 
-    if (import.meta.env.DEV) {
-      // console.debug('Canvas mousemove:', { canvasEvent, currentToolType });
-    }
-
     toolMouseMove(canvasEvent);
   };
 
