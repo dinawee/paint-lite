@@ -15,7 +15,7 @@ function App() {
         <ControlPanel />
 
         <section className="canvas-container">
-          <Canvas width={600} height={400} />
+          <Canvas />
         </section>
 
         <LayersPanel />

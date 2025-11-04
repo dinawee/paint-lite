@@ -1,7 +1,7 @@
-const DEFAULT_CIRCLE_RADIUS = 30;
-const DEFAULT_RECT_WIDTH = 60;
-const DEFAULT_RECT_HEIGHT = 40;
-const DEFAULT_TRIANGLE_SIZE = 50;
+const DEFAULT_CIRCLE_RADIUS = 60;
+const DEFAULT_RECT_WIDTH = 120;
+const DEFAULT_RECT_HEIGHT = 80;
+const DEFAULT_TRIANGLE_SIZE = 100;
 
 export const drawOnCanvas = (
   canvas: HTMLCanvasElement,

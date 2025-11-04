@@ -88,73 +88,77 @@ const ControlPanel = () => {
           Clear Canvas
         </button>
       </div>
-      {showControlPanel ? <h3>Tool Options</h3> : null}
-      <div className="control-content">
-        {!showControlPanel || !currentTool ? (
-          <p>No tool selected</p>
-        ) : isShapeToolActive ? (
-          <>
-            <div className="form-field">
-              <label htmlFor="shape-select">Shape</label>
-              <select
-                id="shape-select"
-                value={selectedShape}
-                onChange={handleShapeChange}
-              >
-                {SHAPE_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-field">
-              <label htmlFor="shape-stroke-color">Stroke Color</label>
-              <input
-                id="shape-stroke-color"
-                type="color"
-                value={selectedStrokeColor}
-                onChange={handleStrokeColorChange}
-                aria-label="Shape stroke color"
-              />
-            </div>
-            <div className="form-field">
-              <label htmlFor="shape-fill-toggle" className="fill-toggle">
+      {showControlPanel ? (
+        <>
+          <h3>Tool Options</h3>
+          <div className="control-content">
+            {!showControlPanel || !currentTool ? (
+              <p>No tool selected</p>
+            ) : isShapeToolActive ? (
+              <>
+                <div className="form-field">
+                  <label htmlFor="shape-select">Shape</label>
+                  <select
+                    id="shape-select"
+                    value={selectedShape}
+                    onChange={handleShapeChange}
+                  >
+                    {SHAPE_OPTIONS.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-field">
+                  <label htmlFor="shape-stroke-color">Stroke Color</label>
+                  <input
+                    id="shape-stroke-color"
+                    type="color"
+                    value={selectedStrokeColor}
+                    onChange={handleStrokeColorChange}
+                    aria-label="Shape stroke color"
+                  />
+                </div>
+                <div className="form-field">
+                  <label htmlFor="shape-fill-toggle" className="fill-toggle">
+                    <input
+                      id="shape-fill-toggle"
+                      type="checkbox"
+                      checked={isFillEnabled}
+                      onChange={handleFillToggle}
+                      aria-label="Shape fill toggle"
+                    />
+                    <span>Enable Fill</span>
+                  </label>
+                  {isFillEnabled && (
+                    <input
+                      id="shape-fill-color"
+                      type="color"
+                      value={selectedFillColor ?? lastFillColorRef.current}
+                      onChange={handleFillColorChange}
+                      aria-label="Shape fill color"
+                    />
+                  )}
+                </div>
+              </>
+            ) : isFillToolActive ? (
+              <div className="form-field">
+                <label htmlFor="fill-tool-color">Fill Color</label>
                 <input
-                  id="shape-fill-toggle"
-                  type="checkbox"
-                  checked={isFillEnabled}
-                  onChange={handleFillToggle}
-                  aria-label="Shape fill toggle"
-                />
-                <span>Enable Fill</span>
-              </label>
-              {isFillEnabled && (
-                <input
-                  id="shape-fill-color"
+                  id="fill-tool-color"
                   type="color"
                   value={selectedFillColor ?? lastFillColorRef.current}
                   onChange={handleFillColorChange}
-                  aria-label="Shape fill color"
+                  aria-label="Fill tool color"
                 />
-              )}
-            </div>
-          </>
-        ) : isFillToolActive ? (
-          <div className="form-field">
-            <label htmlFor="fill-tool-color">Fill Color</label>
-            <input
-              id="fill-tool-color"
-              type="color"
-              value={selectedFillColor ?? lastFillColorRef.current}
-              onChange={handleFillColorChange}
-              aria-label="Fill tool color"
-            />
+              </div>
+            ) : (
+              <p>Controls for {currentTool} coming soon</p>
+            )}
           </div>
-        ) : (
-          <p>Controls for {currentTool} coming soon</p>
-        )}
-      </div>
+        </>
+      ) : null}
     </div>
   );
 };

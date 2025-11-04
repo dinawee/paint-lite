@@ -4,7 +4,11 @@ import { useCanvas } from "../../hooks/useCanvas";
 import { useCanvasTool } from "../../hooks/useCanvasTool";
 import { usePaintStore } from "../../stores/usePaintStore";
 
-const Canvas = ({ width = 600, height = 400, className = "" }: CanvasProps) => {
+const Canvas = ({
+  width = 1600,
+  height = 900,
+  className = "",
+}: CanvasProps) => {
   const { canvasRef, getCanvasCoordinates } = useCanvas();
   const { handlers, currentToolType } = useCanvasTool();
   const {

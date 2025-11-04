@@ -1,6 +1,7 @@
 /* Main app layout */
 .app {
   height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
 }
@@ -23,14 +24,19 @@
   flex: 1;
   display: flex;
   overflow: hidden;
+  position: relative;
 }
 
 /* Control Panel */
 .control-panel {
   width: 250px;
   background-color: #fafafa;
-  border-right: 1px solid #ddd;
+  border: 1px solid #ddd;
   padding: 1rem;
+  position: absolute;
+  margin: 10px;
+  z-index: 100;
+  box-shadow: 2px 8px 8px rgba(0, 0, 0, 0.08);
 }
 
 .control-panel h3 {
@@ -38,22 +44,55 @@
   color: #555;
 }
 
+.control-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 /* Canvas container */
 .canvas-container {
   flex: 1;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #fff;
-  padding: 2rem;
+  z-index: 10;
+}
+
+.canvas-container canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.canvas-container div {
+  width: 90%;
+  height: 90%;
+}
+
+.canvas-container div canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 /* Layers Panel */
 .layers-panel {
   width: 250px;
   background-color: #fafafa;
-  border-left: 1px solid #ddd;
-  padding: 1rem;
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 100;
+  box-shadow: -2px 8px 8px rgba(0, 0, 0, 0.08);
+  max-height: calc(100% - 40px);
+  display: flex;
+  flex-direction: column;
 }
 
 .layers-panel h3 {
@@ -145,9 +184,11 @@
 }
 
 .layers-list {
-  max-height: 95%;
   overflow-y: auto;
   color: #555;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding-bottom: 0.75rem;
 }
 
 .layer-items {
