@@ -22,7 +22,8 @@ const ControlPanel = () => {
   const setSelectedFillColor = usePaintStore(
     (state) => state.setSelectedFillColor,
   );
-  const clearCanvas = usePaintStore((state) => state.clearCanvas);
+  const clearLayers = usePaintStore((state) => state.clearLayers);
+  const canvas = usePaintStore((state) => state.canvasElement);
   const showControlPanel = usePaintStore((state) => state.showControlPanel);
 
   const handleShapeChange = useCallback(
@@ -67,9 +68,10 @@ const ControlPanel = () => {
         }
         setSelectedFillColor(null);
       }
-    },
-    [selectedFillColor, setSelectedFillColor],
-  );
+  const handleClearCanvas = () => {
+    clearCanvas(canvas);
+    clearLayers();
+  };
 
   const isShapeToolActive = currentTool === "shape";
   const isFillToolActive = currentTool === "fill";
@@ -84,7 +86,11 @@ const ControlPanel = () => {
   return (
     <div className="control-panel">
       <div className="panel-toolbar">
-        <button type="button" className="clear-button" onClick={clearCanvas}>
+        <button
+          type="button"
+          className="clear-button"
+          onClick={handleClearCanvas}
+        >
           Clear Canvas
         </button>
       </div>

@@ -42,7 +42,7 @@ export interface PaintActions {
   setShowControlPanel: (visible: boolean) => void;
   setCanvasElement: (canvas: HTMLCanvasElement | null) => void;
   addLayer: (layer: Layer) => void;
-  clearCanvas: () => void;
+  clearLayers: () => void;
 }
 
 export interface Tool {
