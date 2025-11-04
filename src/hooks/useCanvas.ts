@@ -6,7 +6,12 @@ export const useCanvas = () => {
 
   // get canvas 2D context
   const getContext = (): CanvasRenderingContext2D | null => {
-    if (!canvasRef.current) return null;
+    if (!canvasRef.current) {
+      if (import.meta.env.DEV) {
+        console.warn("[CanvasContext] Missing canvas reference");
+      }
+      return null;
+    }
     return canvasRef.current.getContext("2d");
   };
 
